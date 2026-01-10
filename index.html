@@ -613,13 +613,11 @@
     </header>
 
     <main class="container">
-        <!-- 标题部分 -->
         <section class="hero">
             <h1>Building Powerful <span class="highlight">Minecraft</span> Experiences</h1>
             <p>LuminusPlugins creates high-performance, reliable plugins for Minecraft servers, with a focus on anarchy server environments and cutting-edge technology.</p>
         </section>
 
-        <!-- 团队成员 - ✅ Leyanshi下方GitHub按钮 跳转地址已正确配置：https://github.com/Leyanshi -->
         <section id="team">
             <h2 class="section-title">Our Team</h2>
             <div class="team-cards">
@@ -640,10 +638,10 @@
                     </div>
                     <h3>ZDRCZ</h3>
                     <p class="member-role">Core Developer</p>
-                    <div class="member-github">
+                    <a href="#" target="_blank" class="member-github">
                         <i class="ti ti-brand-github"></i>
-                        GitHub
-                    </div>
+                        GitHub Profile
+                    </a>
                 </div>
                 <div class="member-card">
                     <div class="member-icon">
@@ -651,15 +649,14 @@
                     </div>
                     <h3>Join Us</h3>
                     <p class="member-role">We're expanding our team</p>
-                    <div class="member-github">
-                        <i class="ti ti-heart"></i>
-                        Open Positions
-                    </div>
+                    <a href="mailto:infinityorigin@qq.com" target="_blank" class="member-github">
+                        <i class="ti ti-brand-github"></i>
+                        Contact Me
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- 核心项目 - ✅ 重点修改区：AnarchyCore 绿色Git版本标签+下载按钮 完美适配 -->
         <section id="projects">
             <h2 class="section-title">Core Projects</h2>
             <div class="projects-grid">
@@ -791,15 +788,13 @@
         </div>
     </footer>
 
-    <!-- ✅ 修复并优化的JS：精准获取GitHub API的name字段，双重容错，无BUG -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 你的指定API地址
             const apiUrl = 'https://api.github.com/repos/LuminusPlugins/AnarchyCore-NextGen/releases/latest';
             const versionNameElement = document.getElementById('versionName');
-            const fallbackVersion = 'v5.0.0-Beta'; // 兜底版本号
+            const fallbackVersion = 'AC';
             
-            // 优先获取name字段，其次tag_name，完全按你的要求
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
