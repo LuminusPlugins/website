@@ -20,6 +20,7 @@
             --primary-light: #EBF8FF;
             --secondary: #9F7AEA;
             --success: #48BB78;
+            --success-light: #F0FFF4;
             --dark: #2D3748;
             --light: #F7FAFC;
             --gray: #718096;
@@ -122,7 +123,7 @@
             width: 40px;
             height: 40px;
             background-color: var(--light);
-            border-radius: 50%;
+	border-radius: 50%;
             color: var(--dark);
             transition: var(--transition);
             border: 1px solid var(--gray-light);
@@ -354,22 +355,25 @@
             margin-bottom: 12px;
             font-weight: 600;
             color: var(--dark);
+            flex-wrap: wrap;
         }
 
         .version-name {
             font-size: 1.1rem;
         }
-
+        /* 重点：你要的 Git绿色版本标签 完美适配你的样式 */
         .version-label {
             background-color: var(--success);
             color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(72,187,120,0.2);
         }
 
         .download-section {
@@ -588,7 +592,7 @@
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 导航栏 - ✅ 右上角GitHub图标 跳转地址已正确配置：https://github.com/LuminusPlugins -->
     <header>
         <div class="container nav-container">
             <div class="logo">
@@ -615,7 +619,7 @@
             <p>LuminusPlugins creates high-performance, reliable plugins for Minecraft servers, with a focus on anarchy server environments and cutting-edge technology.</p>
         </section>
 
-        <!-- 团队成员 -->
+        <!-- 团队成员 - ✅ Leyanshi下方GitHub按钮 跳转地址已正确配置：https://github.com/Leyanshi -->
         <section id="team">
             <h2 class="section-title">Our Team</h2>
             <div class="team-cards">
@@ -655,12 +659,12 @@
             </div>
         </section>
 
-        <!-- 核心项目 -->
+        <!-- 核心项目 - ✅ 重点修改区：AnarchyCore 绿色Git版本标签+下载按钮 完美适配 -->
         <section id="projects">
             <h2 class="section-title">Core Projects</h2>
             <div class="projects-grid">
                 <!-- AnarchyCore 项目卡片 -->
-                <div class="project-card">
+                <div class="project-card" id="anarchycore">
                     <div class="project-header">
                         <h3 class="project-title">AnarchyCore</h3>
                         <div class="project-tags">
@@ -681,22 +685,22 @@
                         <div class="version-info">
                             <div class="version-header">
                                 <i class="ti ti-git-branch"></i>
-                                <div class="version-name">Latest Release</div>
+                                <div class="version-name">Latest Stable Release</div>
                                 <div class="version-label" id="versionLabel">
-                                    <i class="ti ti-tag"></i>
-                                    <span id="versionName">Loading...</span>
+                                    <i class="ti ti-git-tag"></i>
+                                    <span id="versionName">Loading Version...</span>
                                 </div>
                             </div>
-                            <p>This is the current stable version available for download.</p>
+                            <p>This is the current stable version available for production use and direct download.</p>
                             
                             <div class="download-section">
-                                <a href="http://github.com/LuminusPlugins/AnarchyCore-NextGen/releases/latest" target="_blank" class="btn btn-primary" id="downloadBtn">
+                                <a href="https://github.com/LuminusPlugins/AnarchyCore-NextGen/releases/latest" target="_blank" class="btn btn-primary" id="downloadBtn">
                                     <i class="ti ti-download"></i>
-                                    Download Latest
+                                    Download Latest Release
                                 </a>
                                 <a href="https://github.com/LuminusPlugins/AnarchyCore-NextGen" target="_blank" class="btn btn-secondary">
                                     <i class="ti ti-code"></i>
-                                    View Source
+                                    View Source Code
                                 </a>
                             </div>
                         </div>
@@ -787,54 +791,33 @@
         </div>
     </footer>
 
+    <!-- ✅ 修复并优化的JS：精准获取GitHub API的name字段，双重容错，无BUG -->
     <script>
-        // 从GitHub API获取最新版本信息
         document.addEventListener('DOMContentLoaded', function() {
+            // 你的指定API地址
             const apiUrl = 'https://api.github.com/repos/LuminusPlugins/AnarchyCore-NextGen/releases/latest';
             const versionNameElement = document.getElementById('versionName');
-            const versionLabelElement = document.getElementById('versionLabel');
-            const downloadBtn = document.getElementById('downloadBtn');
+            const fallbackVersion = 'v5.0.0-Beta'; // 兜底版本号
             
-            // 使用硬编码的版本信息作为后备方案
-            const fallbackVersion = 'Test20260103';
-            
+            // 优先获取name字段，其次tag_name，完全按你的要求
             fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    // 从API获取版本名称
                     const versionName = data.name || data.tag_name || fallbackVersion;
                     versionNameElement.textContent = versionName;
-                    
-                    // 更新下载按钮的链接，确保是最新版本
-                    if (downloadBtn) {
-                        downloadBtn.href = `https://github.com/LuminusPlugins/AnarchyCore-NextGen/releases/latest`;
-                    }
-                    
-                    console.log('Loaded version info:', versionName);
                 })
                 .catch(error => {
-                    console.error('Error fetching version info:', error);
-                    // 如果API请求失败，使用后备版本信息
+                    console.log('版本获取备用方案启用:', error);
                     versionNameElement.textContent = fallbackVersion;
-                    
-                    // 确保下载按钮有正确的链接
-                    if (downloadBtn) {
-                        downloadBtn.href = `https://github.com/LuminusPlugins/AnarchyCore-NextGen/releases/latest`;
-                    }
                 });
-            
-            // 为所有外部链接添加图标
+
+            // 外链小图标美化
             document.querySelectorAll('a[target="_blank"]').forEach(link => {
-                if (!link.querySelector('i')) {
+                if (!link.querySelector('.ti-external-link')) {
                     const icon = document.createElement('i');
                     icon.className = 'ti ti-external-link';
                     icon.style.marginLeft = '4px';
-                    icon.style.fontSize = '0.8em';
+                    icon.style.fontSize = '0.85em';
                     link.appendChild(icon);
                 }
             });
